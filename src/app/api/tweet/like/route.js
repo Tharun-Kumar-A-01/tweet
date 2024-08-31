@@ -3,6 +3,7 @@ import connectToDatabase from '@/lib/db';
 import Tweet from '@/models/tweet'; // Import from models directory
 import { isValidObjectId } from 'mongoose';
 import { NextResponse } from 'next/server';
+import { verifyToken } from '@/lib/auth';
 
 export async function POST(request) {
     await connectToDatabase();
@@ -21,8 +22,7 @@ export async function POST(request) {
     const token = authHeader.split(' ')[1];
 
     try {
-        const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        const { username } = decoded;
+        const username = await verifyToken(token)
 
         const likeTweet = await Tweet.findById(ObjectId);
         if (!likeTweet) {

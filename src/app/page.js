@@ -15,6 +15,7 @@ export default function Home() {
     if (tokenFromStorage) {
       setSession(true);
 			setToken(tokenFromStorage)
+      console.log(tokenFromStorage)
       const user_name = verifyToken(token);
       if (!user_name) {
         console.error("unable to verify username :",user_name);
