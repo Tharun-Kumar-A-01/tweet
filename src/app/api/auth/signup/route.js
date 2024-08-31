@@ -22,7 +22,7 @@ export async function POST(request) {
         const newUser = new User({ username, password: `${salt}:${hashedPassword}` });
         await newUser.save();
 
-        const token = signToken(username);
+        const token = await signToken(username);
 
         return NextResponse.json({ token }, { status: 201 });
     } catch (error) {

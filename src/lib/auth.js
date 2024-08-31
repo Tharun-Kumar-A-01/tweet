@@ -14,8 +14,7 @@ export const signToken = async (username) => {
 
 // Token verification function (runs on server-side)
 export const verifyToken = async (token) => {
-  if (typeof window !== 'undefined') {
-    try {;
+    try {
       if (!token) {
         throw new Error('Token not found');
       }
@@ -26,7 +25,7 @@ export const verifyToken = async (token) => {
       console.log(error);
       return null;
     }
-  }
+  
 };
 
 // Logout function (runs on client-side)

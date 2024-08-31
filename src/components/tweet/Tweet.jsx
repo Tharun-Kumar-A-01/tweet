@@ -1,22 +1,25 @@
 "use client";
 import { AvatarIcon, HeartIcon } from "@radix-ui/react-icons";
-import React from "react";
+import React,{ useState,useEffect } from "react";
 import { verifyToken } from "@/lib/auth"; // Ensure these functions are correctly defined and imported
 import Cookies from "js-cookie";
 
 const Tweet = ({ tweet, isUser }) => {
   const [token, setToken] = useState(null);
   const [userName, setUserName] = useState(null);
-
+  const [isOwn,setIsOwn] = useState(false);
   useEffect(() => {
     // Check if the code is running on the client side
     if (typeof window !== "undefined") {
       const localToken = Cookies.get('token')
       if (localToken) {
         setToken(localToken);
-        const userName = verifyToken(localToken);
-        if (userName) {
-          setUserName(userName);
+        const user_name = verifyToken(localToken);
+        if (user_name) {
+          setUserName(user_name);
+		  if(user_name === tweet.username) {
+			  setIsOwn(true);
+		  }
         } else {
           console.warn("Error verifying username");
         }
@@ -24,7 +27,7 @@ const Tweet = ({ tweet, isUser }) => {
         console.warn("No token token found. Anonymus access");
       }
     }
-  },[setToken,setUserName]);
+  },[setToken,setUserName,setIsOwn]);
 
   const handleLike = async (e, ObjectId) => {
     e.preventDefault();
@@ -74,21 +77,21 @@ const Tweet = ({ tweet, isUser }) => {
 
   return (
     <div className="w-full max-w-2xl mt-5 h-fit flex flex-row justify-start align-top">
-			<AvatarIcon color="white" className="h-7 w-7" />
+		<AvatarIcon color="white" className="h-7 w-7" />
       <div className="flex flex-col">
         <div><p>{tweet.username}</p></div>
         <div className="flex flex-row justify-between items-center gap-3 h-full">
           <div className="p-3 rounded-lg rounded-tl-none bg-gray-800">
             {tweet.content}
           </div>
-          {isUser && (
-            <button onClick={(e) => handleDelete(e, tweet.ObjectId)} className="h-fit w-fit p-3 bg-blue-500 rounded-lg">
+          {isOwn && (
+            <button onClick={(e) => handleDelete(e, tweet._id)} className="h-fit w-fit p-3 bg-blue-500 rounded-lg">
               Delete
             </button>
           )}
         </div>
         <div className="flex flex-row items-center">
-          <button className="h-fit" onClick={(e) => handleLike(e, tweet.ObjectId)}>
+          <button className="h-fit" onClick={(e) => handleLike(e, tweet._id)}>
             <HeartIcon color="red" />
           </button>
           <p className="text-xs text-gray-600">{tweet.likes}</p>

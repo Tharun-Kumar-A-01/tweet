@@ -34,7 +34,7 @@ export default function Home() {
 
         if (res.ok) {
           const data = await res.json();
-          setTweets(data);
+          setTweets(data.tweets);
 					console.log(data)
         } else {
           console.error("Failed to fetch tweets:", await res.text());
@@ -43,7 +43,7 @@ export default function Home() {
         console.error("Error fetching tweets:", error);
       } finally {
         setLoading(false);
-      }
+      }    
     };
 
     fetchTweets();
