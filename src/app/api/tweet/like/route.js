@@ -1,4 +1,3 @@
-import jwt from 'jsonwebtoken';
 import connectToDatabase from '@/lib/db';
 import Tweet from '@/models/tweet'; // Import from models directory
 import { isValidObjectId } from 'mongoose';

@@ -12,14 +12,16 @@ export async function POST(request) {
 	const authHeader = request.headers.get('authorization');
 
 	if (!content || typeof content !== 'string') {
-		return NextResponse.json({ status: 400, error: "Content is required and should be a string" });
+		return NextResponse.json({ error: "Content is required and should be a string" },{ status: 400});
 	}
 
 	if (!authHeader || !authHeader.startsWith('Bearer ')) {
-		return NextResponse.json({ status: 401, error: "Authorization header is missing or invalid" });
+		return NextResponse.json({ error: "Authorization header is missing or invalid" },{ status: 401});
 	}
 
 	const token = authHeader.split(' ')[1];
+	console.log("Token recieved : ",token);
+	
 	try {
 		const username = await verifyToken(token)
 		const newTweet = new Tweet({ content, username });
