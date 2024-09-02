@@ -37,8 +37,8 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-900">
-      <form onSubmit={handleSubmit} className="bg-black p-6 rounded shadow-md w-full max-w-sm">
+    <div className="flex flex-col items-center justify-center h-full w-full">
+      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-md w-full max-w-sm">
         <h2 className="text-2xl font-bold mb-4">Login</h2>
         {error && <p className="text-red-500 mb-4">{error}</p>}
         <input
@@ -64,7 +64,7 @@ const Login = () => {
           Login
         </button>
       </form>
-      <p className="mt-4 text-black">
+      <p className="mt-4 text-white">
         {"Don't have an account? "}
         <Link href="/signup" className="text-blue-500 hover:underline">
           Sign Up

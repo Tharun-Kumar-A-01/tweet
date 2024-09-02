@@ -11,7 +11,7 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className="text-white bg-gray-950 flex flex-col sm:flex-row w-screen min-h-screen">
         <SideBar />
-        <main className="flex-grow sm:ml-[25%] md:ml-[20%] p-5">
+        <main className="flex-grow mt-16 sm:mt-0 sm:ml-[25%] md:ml-[20%] p-5">
           {children}
         </main>
       </body>

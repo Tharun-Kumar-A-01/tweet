@@ -1,14 +1,17 @@
 "use client";
-import { AvatarIcon, HeartIcon } from "@radix-ui/react-icons";
+import { AvatarIcon, HeartIcon, TrashIcon } from "@radix-ui/react-icons";
 import React,{ useState,useEffect } from "react";
 import { verifyToken } from "@/lib/auth"; // Ensure these functions are correctly defined and imported
 import Cookies from "js-cookie";
+import { spaceGrotesk } from "@/app/page";
 
-const Tweet = ({ tweet, isUser }) => {
+const Tweet = ({ tweet }) => {
   const [token, setToken] = useState(null);
   const [userName, setUserName] = useState(null);
   const [isOwn,setIsOwn] = useState(false);
-  useEffect(() => {
+
+
+	useEffect(() => {
     // Check if the code is running on the client side
     if (typeof window !== "undefined") {
       const localToken = Cookies.get('token')
@@ -27,7 +30,7 @@ const Tweet = ({ tweet, isUser }) => {
         console.warn("No token token found. Anonymus access");
       }
     }
-  },[setToken,setUserName,setIsOwn]);
+  },[tweet.username]);
 
   const handleLike = async (e, ObjectId) => {
     e.preventDefault();
@@ -76,25 +79,23 @@ const Tweet = ({ tweet, isUser }) => {
   };
 
   return (
-    <div className="w-full max-w-2xl mt-5 h-fit flex flex-row justify-start align-top">
-		<AvatarIcon color="white" className="h-7 w-7" />
-      <div className="flex flex-col">
+    <div className={`${spaceGrotesk.className} w-full max-w-2xl mt-5 h-fit flex flex-row gap-2 justify-start align-top`}>
+		<div className="flex flex-col justify-between">
+			<AvatarIcon color="white" className="h-7 w-7" />
+			{ isOwn && <button onClick={(e) => handleDelete(e, tweet._id)} className="h-fit w-fit p-2 bg-red-500 rounded-lg"><TrashIcon className="h-5 w-5"/></button>}
+			</div>
+      <div className="flex flex-col gap-1">
         <div><p>{tweet.username}</p></div>
         <div className="flex flex-row justify-between items-center gap-3 h-full">
-          <div className="p-3 rounded-lg rounded-tl-none bg-gray-800">
+          <div className={`${spaceGrotesk.className} p-4 py-2 rounded-2xl rounded-tl-none bg-gray-800`}>
             {tweet.content}
           </div>
-          {isOwn && (
-            <button onClick={(e) => handleDelete(e, tweet._id)} className="h-fit w-fit p-3 bg-blue-500 rounded-lg">
-              Delete
-            </button>
-          )}
         </div>
-        <div className="flex flex-row items-center">
+        <div className="flex flex-row items-center gap-1">
           <button className="h-fit" onClick={(e) => handleLike(e, tweet._id)}>
-            <HeartIcon color="red" />
+            <HeartIcon className="text-red-500 h-4 w-4"/>
           </button>
-          <p className="text-xs text-gray-600">{tweet.likes}</p>
+          <p className={`${spaceGrotesk.className} text-xs text-gray-600`}>{tweet.likes}</p>
         </div>
       </div>
     </div>

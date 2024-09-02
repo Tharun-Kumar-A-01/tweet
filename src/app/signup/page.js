@@ -29,17 +29,17 @@ const SignUp = () => {
   };
 
   return (
-    <>
-      <form onSubmit={handleSubmit} className='flex flex-col gap-4 text-black'>
+    
+       <div className="flex flex-col items-center justify-center h-full w-full">
+      <form onSubmit={handleSubmit} className="bg-gray-800 p-6 rounded shadow-md w-full max-w-sm">
+        <h2 className="text-2xl font-bold mb-4">Sign up</h2>
         <input
           type="text"
           placeholder="Username"
           value={username}
-          onChange={(e) => {
-            setUsername(e.target.value);
-          }}
+          onChange={(e) => setUsername(e.target.value)}
           required
-          className='border rounded p-2'
+          className="w-full p-2 text-black mb-4 border rounded"
         />
         <input
           type="password"
@@ -47,12 +47,22 @@ const SignUp = () => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           required
-          className='border rounded p-2'
+          className="w-full p-2 text-black mb-4 border rounded"
         />
-        <button type="submit" className=' p-3 bg-blue-500 rounded-lg'>Sign Up</button>
+        <button
+          type="submit"
+          className="w-full bg-blue-500 text-white p-2 rounded hover:bg-blue-600 transition-colors"
+        >
+          Sign up
+        </button>
       </form>
-      <p className='mt-4'>Already have an account? <Link href="/login">Login</Link></p>
-    </>
+      <p className="mt-4 text-white">
+        {"Already have an account? "}
+        <Link href="/login" className="text-blue-500 hover:underline">
+          Log in
+        </Link>
+      </p>
+    </div>
   );
 };
 

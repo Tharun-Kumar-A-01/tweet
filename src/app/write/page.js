@@ -5,6 +5,7 @@ import { AvatarIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { spaceGrotesk } from "../page";
 
 const Write = () => {
   const [content, setContent] = useState("");
@@ -61,7 +62,7 @@ const Write = () => {
   }
 
   return (
-    <div className="flex flex-col w-full gap-3">
+    <div className={`${spaceGrotesk.className} flex flex-col w-full gap-3`}>
       <div className="flex flex-row gap-3">
         <AvatarIcon color="white" className="h-7 w-7" />
         <p>{userName}</p>
@@ -69,15 +70,15 @@ const Write = () => {
       <div className="w-full">
         <textarea
           onChange={(e) => setContent(e.target.value)}
-          className="w-full h-50 rounded-lg p-5 bg-gray-800"
+          className={`${spaceGrotesk.className} w-full h-50 rounded-lg p-5 bg-gray-800`}
           value={content}
         />
       </div>
       <button
-        className="w-fit p-3 rounded-lg bg-blue-500"
+        className={`${spaceGrotesk.className} w-fit p-4 py-2 bg-primary rounded-full text-black font-bold`}
         onClick={handlePost}
       >
-        Post
+        POST
       </button>
     </div>
   );
