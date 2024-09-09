@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const Tweet = require('./src/models/tweet');
 const http = require('http');
 const express = require('express');
+require('dotenv').config();
 
 const app = express();
 const server = http.createServer(app);
