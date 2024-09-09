@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { spaceGrotesk } from "../page";
+import io from "socket.io-client"; // Import Socket.IO client
+
+const socket = io("https://tweety-by-tharun.netlify.app:3001");
 
 const Write = () => {
   const [content, setContent] = useState("");

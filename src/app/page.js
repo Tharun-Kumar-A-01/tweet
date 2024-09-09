@@ -6,6 +6,9 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import io from "socket.io-client"; // Import Socket.IO client
+
+const socket = io("https://tweety-by-tharun.netlify.app:3001");
 
 export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
