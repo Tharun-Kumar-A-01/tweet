@@ -1,17 +1,19 @@
-const { Server } = require('socket.io');
-const mongoose = require('mongoose');
-const Tweet = require('./src/models/tweet');
-const http = require('http');
 const express = require('express');
-require('dotenv').config();
+const next = require('next');
+const http = require('http');
+const Tweet = require("./src/models/tweet")
+const mongoose = require('mongoose');
+const { Server } = require('socket.io');
+require('dotenv').config(); // Ensure environment variables are loaded
 
-const app = express();
-const server = http.createServer(app);
-const io = new Server(server,{
-  cors: {
-    origin: 'https://tweety-by-tharun.netlify.app'
-  }
-});
+const dev = process.env.NODE_ENV !== 'production';
+const app = next({ dev });
+const handle = app.getRequestHandler();
+
+app.prepare().then(() => {
+  const server = express();
+  const httpServer = http.createServer(server);
+  const io = new Server(httpServer);
 
 // Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI);
@@ -85,8 +87,13 @@ io.on('connection', (socket) => {
     console.log('A user disconnected:', socket.id);
   });
 });
+ // Next.js handling
+ server.all('*', (req, res) => {
+	return handle(req, res);
+});
 
-const PORT = process.env.PORT || 3001;
-server.listen(PORT, () => {
-  console.log(`Socket.IO server running on port ${PORT}`);
+const port = process.env.PORT || 3001;
+httpServer.listen(port, () => {
+	console.log(`> Ready on http://localhost:${port}`);
+});
 });
