@@ -1,7 +1,7 @@
 "use client"
 import { spaceGrotesk } from '@/app/page';
 import { verifyToken } from '@/lib/auth';
-import { AvatarIcon } from '@radix-ui/react-icons';
+import { AvatarIcon, EnterIcon, PlusCircledIcon } from '@radix-ui/react-icons';
 import Cookies from 'js-cookie';
 import Link from 'next/link';
 import {useState,useEffect} from 'react';
@@ -26,7 +26,7 @@ const SideBar = () => {
       >
         <div className="flex w-full flex-col gap-10 items-center">
 					<Link href="/">
-          <h1 className="font-bold hidden sm:inline-block text-3xl">TWEETY</h1>
+          <h1 className="font-bold hidden sm:inline-block text-3xl ">TWEET</h1>
 					</Link>
         </div>
         <div className="flex flex-col w-fit gap-2 items-center mb-3">
@@ -54,9 +54,20 @@ const SideBar = () => {
 				<Link href="/">
 				<h1 className="font-bold sm:hidden text-2xl">TWEETY</h1>
 				</Link>
-        <Link href="/profile">
-          <AvatarIcon className="w-8 h-8 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+        { session ?(<Link href="/profile">
+          <AvatarIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+        </Link>):(
+				<div className='flex items-center gap-1'>
+				<Link href="/profile">
+          <PlusCircledIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
         </Link>
+				<div className='h-9 w-[1px] bg-gray-400 '/>
+				<Link href="/profile">
+          <EnterIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+        </Link>
+				</div>
+				)}
+				
       </div>
     </>
   );

@@ -10,8 +10,8 @@ const tweetSchema = new mongoose.Schema({
     required: true,
   },
 	likes:{
-		type: Number,
-		default:0
+		type: [String],
+		default:[]
 	}
 }, {
   timestamps: true,

@@ -2,7 +2,7 @@ import "./globals.css";
 import SideBar from "@/components/Sidebar/SideBar";
 
 export const metadata = {
-  title: "Tweety",
+  title: "tweet",
   description: "Share your thoughts",
 };
 

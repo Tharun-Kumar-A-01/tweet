@@ -1,5 +1,5 @@
 "use client";
-import { AvatarIcon, HeartIcon, TrashIcon } from "@radix-ui/react-icons";
+import { AvatarIcon, HeartFilledIcon, HeartIcon, TrashIcon } from "@radix-ui/react-icons";
 import React,{ useState,useEffect } from "react";
 import { verifyToken } from "@/lib/auth"; // Ensure these functions are correctly defined and imported
 import Cookies from "js-cookie";
@@ -9,7 +9,7 @@ const Tweet = ({ tweet }) => {
   const [token, setToken] = useState(null);
   const [userName, setUserName] = useState(null);
   const [isOwn,setIsOwn] = useState(false);
-
+	const [liked,setLiked] = useState(false)
 
 	useEffect(() => {
     // Check if the code is running on the client side
@@ -20,6 +20,9 @@ const Tweet = ({ tweet }) => {
         const user_name = verifyToken(localToken);
         if (user_name) {
           setUserName(user_name);
+					if(tweet.likes.indexOf(user_name) !== -1){
+						setLiked(true)
+					}
 		  if(user_name === tweet.username) {
 			  setIsOwn(true);
 		  }
@@ -30,11 +33,12 @@ const Tweet = ({ tweet }) => {
         console.warn("No token token found. Anonymus access");
       }
     }
-  },[tweet.username]);
+  },[tweet.username,tweet.likes]);
 
   const handleLike = async (e, ObjectId) => {
     e.preventDefault();
     try {
+			
       const res = await fetch("/api/tweet/like", {
         method: "POST",
         headers: {
@@ -47,6 +51,7 @@ const Tweet = ({ tweet }) => {
       const data = await res.json(); // Parse response data
       if (res.ok) {
         console.log(data);
+				setLiked((prev)=>!prev)
       } else {
         console.error(data);
       }
@@ -93,9 +98,13 @@ const Tweet = ({ tweet }) => {
         </div>
         <div className="flex flex-row items-center gap-1">
           <button className="h-fit" onClick={(e) => handleLike(e, tweet._id)}>
-            <HeartIcon className="text-red-500 h-4 w-4"/>
+						{liked ?(
+							<HeartFilledIcon className="text-red-500 h-4 w-4"/>
+						):(
+							<HeartIcon className="text-red-500 h-4 w-4"/>
+						)}
           </button>
-          <p className={`${spaceGrotesk.className} text-xs text-gray-600`}>{tweet.likes}</p>
+          <p className={`${spaceGrotesk.className} text-xs text-gray-600`}>{tweet.likes.length}</p>
         </div>
       </div>
     </div>
