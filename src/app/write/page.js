@@ -19,9 +19,9 @@ const Write = () => {
       const localToken = Cookies.get('token')
       if (localToken) {
         setToken(localToken);
-        const userName = verifyToken(localToken);
-        if (userName) {
-          setUserName(userName);
+        const username = verifyToken(localToken);
+        if (username) {
+          setUserName(username);
         } else {
           console.error("Unable to verify Username");
           router.push("/login");
@@ -36,16 +36,7 @@ const Write = () => {
   async function handlePost(e) {
     e.preventDefault();
     try {
-      const res = await fetch("/api/tweet", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          content,
-        }),
-      });
+      socket.emit('newTweet', { content, userId : userName });
 
       if (!res.ok) {
         throw new Error("Failed to post tweet");

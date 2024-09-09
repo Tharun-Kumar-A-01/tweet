@@ -27,33 +27,38 @@ export default function Home() {
 			}
 		}
 
-		const fetchTweets = async () => {
-			try {
-				const res = await fetch("/api/tweet", {
-					method: "GET",
-					headers: {
-						"Content-Type": "application/json",
-					},
-				});
+		socket.on('oldTweets', (oldTweets) => {
+      setTweets(oldTweets);
+			setLoading(false)
+    });
 
-				if (res.ok) {
-					const data = await res.json();
-					setTweets(data.tweets);
-					console.log(data);
-				} else {
-					console.error("Failed to fetch tweets:", await res.text());
-				}
-			} catch (error) {
-				console.error("Error fetching tweets:", error);
-			} finally {
-				setLoading(false);
-			}
-		};
+    // Listen for new tweets
+    socket.on('newTweet', (tweet) => {
+      setTweets((prev) => [tweet, ...prev]);
+    });
 
-		fetchTweets();
-	}, [setSession, setToken, token]);
+    // Listen for tweet likes
+    socket.on('updateTweet', (updatedTweet) => {
+      setTweets((prev) =>
+        prev.map((tweet) =>
+          tweet._id === updatedTweet._id ? updatedTweet : tweet
+        )
+      );
+    });
 
-	return (
+		socket.on('deleteTweet', (tweetId) => {
+      setTweets((prev) => prev.filter((tweet) => tweet._id !== tweetId));
+    });
+
+    return () => {
+      socket.off('oldTweets');
+      socket.off('newTweet');
+      socket.off('updateTweet');
+			socket.off('deleteTweet');
+    };
+	}, [token]);
+
+ 	return (
 		<div>
 			<h1 className="text-2xl font-bold mb-3">Tweets</h1>
 			{loading ? (
