@@ -1,6 +1,6 @@
 const { Server } = require('socket.io');
 const mongoose = require('mongoose');
-const Tweet = require('./models/tweet');
+const Tweet = require('./src/models/tweet');
 const http = require('http');
 const express = require('express');
 
