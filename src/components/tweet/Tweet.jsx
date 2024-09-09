@@ -16,7 +16,7 @@ const Tweet = ({ tweet }) => {
 
   useEffect(() => {
     // Initialize Socket.IO client
-    socket = io("https://tweety-by-tharun.netlify.app:3001"); 
+    socket = io("wss://tweety-by-tharun.netlify.app:3001"); 
 
     // Check if the code is running on the client side
     if (typeof window !== "undefined") {
