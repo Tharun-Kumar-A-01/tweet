@@ -35,16 +35,15 @@ export async function POST(request) {
 		}
 
 		if (username) {
-			const index = likeTweet.likes.indexOf(username);
-			if ( index === -1) {
+			if (likeTweet.likes.includes(username)) {
 				likeTweet.likes.push(username);
 				await likeTweet.save(); // Await save operation
 				return NextResponse.json(
 					{ message: "Tweet liked successfully", tweet: likeTweet },
 					{ status: 200 }
 				);
-			} else if ( index !== -1) {
-				likeTweet.likes = likeTweet.likes.filter((user)=>user !== username);
+			} else if (!likeTweet.likes.includes(username)) {
+				likeTweet.likes = likeTweet.likes.filter((user) => user !== username);
 				await likeTweet.save(); // Await save operation
 				return NextResponse.json(
 					{ message: "Tweet unliked successfully", tweet: likeTweet },

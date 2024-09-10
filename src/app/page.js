@@ -6,9 +6,6 @@ import Cookies from "js-cookie";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
 import { Pencil1Icon } from "@radix-ui/react-icons";
-import io from "socket.io-client"; // Import Socket.IO client
-
-const socket = io("wss://tweety-by-tharun.netlify.app:3001");
 
 export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -30,38 +27,33 @@ export default function Home() {
 			}
 		}
 
-		socket.on('oldTweets', (oldTweets) => {
-      setTweets(oldTweets);
-			setLoading(false)
-    });
+		const fetchTweets = async () => {
+			try {
+				const res = await fetch("/api/tweet", {
+					method: "GET",
+					headers: {
+						"Content-Type": "application/json",
+					},
+				});
 
-    // Listen for new tweets
-    socket.on('newTweet', (tweet) => {
-      setTweets((prev) => [tweet, ...prev]);
-    });
+				if (res.ok) {
+					const data = await res.json();
+					setTweets(data.tweets);
+					console.log(data);
+				} else {
+					console.error("Failed to fetch tweets:", await res.text());
+				}
+			} catch (error) {
+				console.error("Error fetching tweets:", error);
+			} finally {
+				setLoading(false);
+			}
+		};
 
-    // Listen for tweet likes
-    socket.on('updateTweet', (updatedTweet) => {
-      setTweets((prev) =>
-        prev.map((tweet) =>
-          tweet._id === updatedTweet._id ? updatedTweet : tweet
-        )
-      );
-    });
-
-		socket.on('deleteTweet', (tweetId) => {
-      setTweets((prev) => prev.filter((tweet) => tweet._id !== tweetId));
-    });
-
-    return () => {
-      socket.off('oldTweets');
-      socket.off('newTweet');
-      socket.off('updateTweet');
-			socket.off('deleteTweet');
-    };
+		fetchTweets();
 	}, [token]);
 
- 	return (
+	return (
 		<div>
 			<h1 className="text-2xl font-bold mb-3">Tweets</h1>
 			{loading ? (
