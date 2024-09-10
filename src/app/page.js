@@ -65,7 +65,7 @@ export default function Home() {
 			)}
 			<Link href="/write">
 				<button
-					className={`${spaceGrotesk.className} hidden sm:flex flex-row gap-2 align-middle pt-3 justify-center absolute right-5  px-4 py-2 bg-primary rounded-full text-black font-bold bottom-5`}
+					className={`${spaceGrotesk.className} hidden sm:flex flex-row gap-2 align-middle justify-center absolute right-5  px-4 py-2 bg-primary rounded-full text-black font-bold bottom-5`}
 				>
 					<span className="hidden sm:block">WRITE</span>{" "}
 					<Pencil1Icon strokeWidth={3} className="w-5 h-5" />

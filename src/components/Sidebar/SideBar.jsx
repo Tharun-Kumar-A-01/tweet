@@ -55,15 +55,15 @@ const SideBar = () => {
 				<h1 className="font-bold sm:hidden text-2xl">TWEETY</h1>
 				</Link>
         { session ?(<Link href="/profile">
-          <AvatarIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+          <AvatarIcon className="w-10 h-10 p-1 border border-blue-500 rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
         </Link>):(
 				<div className='flex items-center gap-1'>
-				<Link href="/profile">
-          <PlusCircledIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+				<Link href="/signup">
+          <PlusCircledIcon className="w-10 h-10 p-1 border border-blue-500 rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
         </Link>
 				<div className='h-9 w-[1px] bg-gray-400 '/>
-				<Link href="/profile">
-          <EnterIcon className="w-10 h-10 p-1  rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
+				<Link href="/login">
+          <EnterIcon className="w-10 h-10 p-1 border border-blue-500 rounded-full hover:bg-blue-400/30 transition-all duration-150" color='white'/>
         </Link>
 				</div>
 				)}

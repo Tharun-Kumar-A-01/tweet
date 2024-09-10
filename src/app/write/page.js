@@ -1,7 +1,7 @@
 "use client";
 
 import { verifyToken } from "@/lib/auth";
-import { AvatarIcon } from "@radix-ui/react-icons";
+import { AvatarIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
@@ -75,10 +75,10 @@ const Write = () => {
 				/>
 			</div>
 			<button
-				className={`${spaceGrotesk.className} w-fit p-4 py-2 bg-primary rounded-full text-black font-bold`}
+				className={`${spaceGrotesk.className} w-fit p-4 py-2 flex flex-row gap-2 align-middle bg-primary rounded-full text-black font-bold`}
 				onClick={handlePost}
 			>
-				POST
+				POST <PaperPlaneIcon strokeWidth={3} className="w-5 h-5" />
 			</button>
 		</div>
 	);
