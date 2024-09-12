@@ -10,7 +10,7 @@ import { Pencil1Icon } from "@radix-ui/react-icons";
 export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
 export default function Home() {
-	const [tweets, setTweets] = useState();
+	const [tweets, setTweets] = useState([]);
 	const [session, setSession] = useState(false);
 	const [loading, setLoading] = useState(true);
 	const [token, setToken] = useState("");
@@ -51,6 +51,9 @@ export default function Home() {
 		};
 
 		fetchTweets();
+
+		const intervalId = setInterval(fetchTweets, 5000);
+		 return ()=>clearInterval(intervalId)
 	}, [token]);
 
 	return (

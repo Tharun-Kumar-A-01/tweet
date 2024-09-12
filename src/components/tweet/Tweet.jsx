@@ -33,7 +33,7 @@ const Tweet = ({ tweet }) => {
         console.warn("No token token found. Anonymus access");
       }
     }
-  },[]);
+  },[tweet]);
 
   const handleLike = async (e, ObjectId) => {
     e.preventDefault();
