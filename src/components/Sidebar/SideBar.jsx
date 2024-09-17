@@ -8,15 +8,17 @@ import {useState,useEffect} from 'react';
 
 const SideBar = () => {
 	const [session, setSession] = useState(false);
-
-  useEffect(() => {
-    // Check if the code is running on the client side
-    if (typeof window !== "undefined") {
-      const localToken = Cookies.get('token')
-      if (localToken && verifyToken(localToken)) {
-        setSession(true)
-      }
-    }
+	useEffect(() => {
+		const localToken = Cookies.get("token");
+		if (localToken) {
+			setSession(true);
+			console.log(localToken);
+			const user_name = verifyToken(localToken);
+			if (!user_name) {
+				console.error("unable to verify username :", user_name);
+				setSession(false);
+			}
+		}
   },[]);
   return (
     <>
@@ -47,7 +49,7 @@ const SideBar = () => {
         </div>
       </div>
 
-      {/* Bottom bar for smaller screens */}
+      {/* Traditional Navbar for smaller screens */}
       <div 
         className="border-b border-white w-full sm:hidden bg-gray-950 text-white h-16 px-5 fixed flex flex-row justify-between items-center"
       >

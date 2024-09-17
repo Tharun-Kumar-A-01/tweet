@@ -2,41 +2,36 @@
 import { AvatarIcon, HeartFilledIcon, HeartIcon, TrashIcon } from "@radix-ui/react-icons";
 import React,{ useState,useEffect } from "react";
 import { verifyToken } from "@/lib/auth"; // Ensure these functions are correctly defined and imported
-import Cookies from "js-cookie";
 import { spaceGrotesk } from "@/app/page";
 
-const Tweet = ({ tweet }) => {
-  const [token, setToken] = useState(null);
+const Tweet = ({ tweet , token}) => {
+
   const [userName, setUserName] = useState(null);
   const [isOwn,setIsOwn] = useState(false);
 	const [liked,setLiked] = useState(false)
-
+	
 	useEffect(() => {
-    // Check if the code is running on the client side
-    if (typeof window !== "undefined") {
-      const localToken = Cookies.get('token')
-      if (localToken) {
-        setToken(localToken);
-        const user_name = verifyToken(localToken);
-        if (user_name) {
-          setUserName(user_name);
-					if(tweet.likes.includes(user_name)){
-						setLiked(true)
-					}
-		  if(user_name === tweet.username) {
-			  setIsOwn(true);
-		  }
-        } else {
-          console.warn("Error verifying username");
-        }
-      } else {
-        console.warn("No token token found. Anonymus access");
-      }
-    }
-  },[tweet]);
+    try {
+			const user_name = verifyToken(token);
+			if (user_name) {
+						setUserName(user_name);
+						if(tweet.likes.includes(user_name)){
+							setLiked(true)
+						}
+				if(user_name === tweet.username) {
+					setIsOwn(true);
+				}
+			}
+		} catch (error) {			
+			console.warn("Error verifying username");
+		}    
+  },[tweet,token]);
 
   const handleLike = async (e, ObjectId) => {
     e.preventDefault();
+		if(!token) {
+			return null
+		}
     try {
 			
       const res = await fetch("/api/tweet/like", {
@@ -53,10 +48,10 @@ const Tweet = ({ tweet }) => {
         console.log(data);
 				setLiked((prev)=>!prev)
 				if(liked){
-					tweet.likes -=1;
+					tweet.likes.remove(userName);
 				}
 				else {
-					tweet.likes +=1;
+					tweet.likes.append(userName);
 				}
       } else {
         console.error(data);
@@ -68,6 +63,9 @@ const Tweet = ({ tweet }) => {
 
   const handleDelete = async (e, ObjectId) => {
     e.preventDefault();
+		if(!token) {
+			return null
+		}
     try {
       const res = await fetch("/api/tweet", {
         method: "DELETE",
