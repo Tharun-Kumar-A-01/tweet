@@ -38,7 +38,7 @@ export default function Home() {
 
 				if (res.ok) {
 					const data = await res.json();
-					if(data.tweets !== tweets) {
+					if (data.tweets !== tweets) {
 						setTweets(data.tweets);
 					}
 					console.log(data);
@@ -55,8 +55,8 @@ export default function Home() {
 		fetchTweets();
 
 		const intervalId = setInterval(fetchTweets, 5000);
-		 return ()=>clearInterval(intervalId)
-	}, [token,tweets]);
+		return () => clearInterval(intervalId);
+	}, [token, tweets]);
 
 	return (
 		<div>
@@ -64,7 +64,9 @@ export default function Home() {
 			{loading ? (
 				<div className="absolute top-1/2 left-1/2 h-12 w-12 rounded-full border-l-2 border-t-2 border-white animate-spin"></div>
 			) : tweets.length > 0 ? (
-				tweets.map((tweet) => <Tweet key={tweet._id} tweet={tweet} token={token}/>)
+				tweets.map((tweet) => (
+					<Tweet key={tweet._id} tweet={tweet} token={token} />
+				))
 			) : (
 				<p>No tweets available</p>
 			)}

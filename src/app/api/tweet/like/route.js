@@ -35,14 +35,14 @@ export async function POST(request) {
 		}
 
 		if (username) {
-			if (likeTweet.likes.includes(username)) {
+			if (!likeTweet.likes.includes(username)) {
 				likeTweet.likes.push(username);
 				await likeTweet.save(); // Await save operation
 				return NextResponse.json(
 					{ message: "Tweet liked successfully", tweet: likeTweet },
 					{ status: 200 }
 				);
-			} else if (!likeTweet.likes.includes(username)) {
+			} else if (likeTweet.likes.includes(username)) {
 				likeTweet.likes = likeTweet.likes.filter((user) => user !== username);
 				await likeTweet.save(); // Await save operation
 				return NextResponse.json(
