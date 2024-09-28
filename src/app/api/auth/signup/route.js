@@ -1,9 +1,10 @@
 import { scryptSync, randomBytes } from "crypto";
-import jwt from "jsonwebtoken";
 import connectToDatabase from "@/lib/db.js";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
-import { signToken } from "@/lib/auth";
+import { SignJWT } from "jose";
+
+const secretKey = process.env.JWT_SECRET;
 
 export async function POST(request) {
 	await connectToDatabase();
@@ -27,8 +28,8 @@ export async function POST(request) {
 			password: `${salt}:${hashedPassword}`,
 		});
 		await newUser.save();
-
-		const token = await signToken(username);
+		
+		const token = await new SignJWT({ username }).setProtectedHeader({ alg: "HS256" }).sign(secretKey);
 
 		return NextResponse.json({ token }, { status: 201 });
 	} catch (error) {

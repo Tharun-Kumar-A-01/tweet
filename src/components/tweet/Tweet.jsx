@@ -8,6 +8,7 @@ import {
 import React, { useState, useEffect } from "react";
 import { verifyToken } from "@/lib/auth";
 import { spaceGrotesk } from "@/app/page";
+import Cookies from "js-cookie";
 
 const Tweet = ({ tweet }) => {
 	const [userName, setUserName] = useState(null);

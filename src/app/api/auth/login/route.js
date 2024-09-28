@@ -1,9 +1,10 @@
-import jwt from "jsonwebtoken";
 import connectToDatabase from "@/lib/db";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
 import { scryptSync, timingSafeEqual } from "crypto";
-import { signToken } from "@/lib/auth";
+import { SignJWT } from "jose";
+
+const secretKey = process.env.JWT_SECRET;
 
 async function verifyPassword(password, user_password) {
 	const [salt, key] = user_password.split(":");
@@ -43,7 +44,8 @@ export async function POST(request) {
 			);
 		}
 
-		const token = await signToken(username);
+		const token = await new SignJWT({ username }).setProtectedHeader({ alg: "HS256" }).sign(secretKey);
+
 		console.log("Generated token:", token);
 
 		return NextResponse.json({ token }, { status: 200 });

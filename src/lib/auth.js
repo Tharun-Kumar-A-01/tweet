@@ -1,7 +1,7 @@
 import Cookies from "js-cookie";
 import { jwtVerify, SignJWT } from "jose";
 
-const secretKey = new TextEncoder().encode(process.env.JWT_SECRET);
+const secretKey = process.env.JWT_SECRET;
 
 // Token retrieval function (runs on client-side)
 export const signToken = async (username) => {

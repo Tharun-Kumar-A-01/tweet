@@ -81,7 +81,7 @@ const SideBar = () => {
 								color="white"
 							/>
 						</Link>
-						<div className="h-9 w-[1px] bg-gray-400 " />
+						<div className="h-9 w-[1px] bg-gray-500 " />
 						<Link href="/login">
 							<EnterIcon
 								className="w-10 h-10 p-1 border border-blue-500 rounded-full hover:bg-blue-400/30 transition-all duration-150"
