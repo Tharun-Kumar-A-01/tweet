@@ -3,12 +3,7 @@ import Cookies from "js-cookie";
 import "./globals.css";
 import SideBar from "@/components/Sidebar/SideBar";
 import { createContext,useState } from "react";
-/* 
-export const metadata = {
-  title: "Tweet",
-  description: "Share your thoughts",
-};
- */
+
 const AuthContext = createContext(null);
 
 export default function RootLayout({ children }) {
@@ -33,6 +28,10 @@ export default function RootLayout({ children }) {
 	
 	return (
     <html lang="en">
+		<head>
+			<title>Tweet</title>	
+			<meta name="description" content="A Simple tweet application"/>
+		</head>
       <body className="text-white bg-gray-950 flex flex-col sm:flex-row w-screen  min-h-screen">
 				<AuthContext.Provider value={{username:userName}}>
 			  <SideBar />
