@@ -1,31 +1,24 @@
 "use client";
 
-import { verifyToken } from "@/lib/auth";
 import { AvatarIcon, PaperPlaneIcon } from "@radix-ui/react-icons";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Cookies from "js-cookie";
 import { spaceGrotesk } from "../page";
+import AuthContext from "../layout";
 
 const Write = () => {
 	const [content, setContent] = useState("");
 	const [token, setToken] = useState(null);
-	const [userName, setUserName] = useState(null);
+	const user = useContext(AuthContext);
+	const userName = user?.username;
 	const router = useRouter();
 
 	useEffect(() => {
-		// Check if the code is running on the client side
 		if (typeof window !== "undefined") {
 			const localToken = Cookies.get("token");
 			if (localToken) {
 				setToken(localToken);
-				const userName = verifyToken(localToken);
-				if (userName) {
-					setUserName(userName);
-				} else {
-					console.error("Unable to verify Username");
-					router.push("/login");
-				}
 			} else {
 				console.error("Unable to get token");
 				router.push("/login");
@@ -54,7 +47,6 @@ const Write = () => {
 			const data = await res.json();
 			console.log(data);
 
-			// Redirect or update UI after successful post
 			router.push("/");
 		} catch (error) {
 			console.error(error);

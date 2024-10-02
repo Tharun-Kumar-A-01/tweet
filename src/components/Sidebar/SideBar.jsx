@@ -1,25 +1,29 @@
 "use client";
 import { spaceGrotesk } from "@/app/page";
-import { verifyToken } from "@/lib/auth";
 import { AvatarIcon, EnterIcon, PlusCircledIcon } from "@radix-ui/react-icons";
 import Cookies from "js-cookie";
 import Link from "next/link";
-import { useState, useEffect } from "react";
+import { useState, useEffect,useContext } from "react";
+import AuthContext from "../../app/layout";
 
 const SideBar = () => {
 	const [session, setSession] = useState(false);
+	const user = useContext(AuthContext);
+	const userName = user?.username;
+	const [token, setToken] = useState("");
+
 	useEffect(() => {
 		const localToken = Cookies.get("token");
 		if (localToken) {
 			setSession(true);
+			setToken(localToken);
 			console.log(localToken);
-			const user_name = verifyToken(localToken);
-			if (!user_name) {
-				console.error("unable to verify username :", user_name);
+			if (!userName) {
+				console.error("unable to verify username :", userName);
 				setSession(false);
 			}
 		}
-	}, []);
+	}, [userName]);
 	return (
 		<>
 			{/* Sidebar for larger screens */}

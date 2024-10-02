@@ -3,7 +3,23 @@ import connectToDatabase from "@/lib/db";
 import Tweet from "@/models/tweet";
 import { NextResponse } from "next/server";
 import { isValidObjectId } from "mongoose";
-import { verifyToken } from "@/lib/auth";
+import { jwtVerify } from "jose";
+
+const secretKey = process.env.JWT_SECRET;
+
+ const verifyToken = async (token) => {
+	try {
+		if (!token) {
+			throw new Error("Token not found");
+		}
+
+		const { payload } = await jwtVerify(token, secretKey);
+		return payload.username;
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
+};
 
 export async function POST(request) {
 	await connectToDatabase();
@@ -47,7 +63,7 @@ export async function GET(request) {
 	await connectToDatabase();
 
 	try {
-		const tweetList = await Tweet.find().lean(); // Convert to plain JS object, removing Mongoose methods and possible circular references
+		const tweetList = await Tweet.find().sort({ createdAt: -1 }).lean();      // Used lean() to remove any mongoose methods and possible circular references
 		return NextResponse.json({ tweets: tweetList }, { status: 200 });
 	} catch (error) {
 		console.error(error);

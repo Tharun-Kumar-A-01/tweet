@@ -1,11 +1,11 @@
 "use client";
 import Tweet from "@/components/tweet/Tweet";
-import { useState, useEffect } from "react";
-import { verifyToken } from "@/lib/auth";
+import { useState, useEffect,useContext } from "react";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { Space_Grotesk } from "next/font/google";
 import { Pencil1Icon } from "@radix-ui/react-icons";
+import AuthContext from "./layout";
 
 export const spaceGrotesk = Space_Grotesk({ subsets: ["latin"] });
 
@@ -13,16 +13,17 @@ export default function Home() {
 	const [tweets, setTweets] = useState([]);
 	const [session, setSession] = useState(false);
 	const [loading, setLoading] = useState(true);
+	const user = useContext(AuthContext);
+	const userName = user?.username;
 	const [token, setToken] = useState("");
 	useEffect(() => {
-		const tokenFromStorage = Cookies.get("token");
-		if (tokenFromStorage) {
+		const localToken = Cookies.get("token");
+		if (localToken) {
 			setSession(true);
-			setToken(tokenFromStorage);
-			console.log(tokenFromStorage);
-			const user_name = verifyToken(token);
-			if (!user_name) {
-				console.error("unable to verify username :", user_name);
+			setToken(localToken);
+			console.log(localToken);
+			if (!userName) {
+				console.error("unable to verify username :", userName);
 				setSession(false);
 			}
 		}
@@ -41,7 +42,6 @@ export default function Home() {
 					if (data.tweets !== tweets) {
 						setTweets(data.tweets);
 					}
-					console.log(data);
 				} else {
 					console.error("Failed to fetch tweets:", await res.text());
 				}
@@ -56,7 +56,7 @@ export default function Home() {
 
 		const intervalId = setInterval(fetchTweets, 5000);
 		return () => clearInterval(intervalId);
-	}, [token, tweets]);
+	}, [ userName, tweets]);
 
 	return (
 		<div>
@@ -65,7 +65,7 @@ export default function Home() {
 				<div className="absolute top-1/2 left-1/2 h-12 w-12 rounded-full border-l-2 border-t-2 border-white animate-spin"></div>
 			) : tweets.length > 0 ? (
 				tweets.map((tweet) => (
-					<Tweet key={tweet._id} tweet={tweet} token={token} />
+					<Tweet key={tweet._id} tweet={tweet} user={{username:userName , token , session}} />
 				))
 			) : (
 				<p>No tweets available</p>

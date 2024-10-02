@@ -2,7 +2,23 @@ import connectToDatabase from "@/lib/db";
 import Tweet from "@/models/tweet"; // Import from models directory
 import { isValidObjectId } from "mongoose";
 import { NextResponse } from "next/server";
-import { verifyToken } from "@/lib/auth";
+import { jwtVerify } from "jose";
+
+const secretKey = process.env.JWT_SECRET;
+
+ const verifyToken = async (token) => {
+	try {
+		if (!token) {
+			throw new Error("Token not found");
+		}
+
+		const { payload } = await jwtVerify(token, secretKey);
+		return payload.username;
+	} catch (error) {
+		console.log(error);
+		return null;
+	}
+};
 
 export async function POST(request) {
 	await connectToDatabase();

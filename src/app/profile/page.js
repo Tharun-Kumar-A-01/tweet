@@ -1,14 +1,17 @@
 "use client";
 
-import { logout, verifyToken } from "@/lib/auth";
+import { logout } from "@/lib/auth";
 import { AvatarIcon } from "@radix-ui/react-icons";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import { spaceGrotesk } from "@/app/page";
+import AuthContext from "../layout";
 
 const Profile = () => {
-	const [token, setToken] = useState(null);
-	const [userName, setUserName] = useState(null);
+	const [token, setToken] = useState(null);	
+	const user = useContext(AuthContext);
+	const userName = user?.username;;
 	const router = useRouter();
 
 	useEffect(() => {
@@ -16,13 +19,6 @@ const Profile = () => {
 			const localToken = Cookies.get("token");
 			if (localToken) {
 				setToken(localToken);
-				const userName = verifyToken(localToken);
-				if (userName) {
-					setUserName(userName);
-				} else {
-					console.error("Unable to verify Username");
-					router.push("/login");
-				}
 			} else {
 				console.error("Unable to get token");
 				router.push("/login");
@@ -39,10 +35,10 @@ const Profile = () => {
 			<AvatarIcon className="h-10 w-10" />
 			<p>{userName}</p>
 			<button
-				className="w-fit mt-3 p-3 rounded-lg bg-blue-500"
+				className={`${spaceGrotesk.className} p-4 py-2 border bg-transparent border-primary rounded-full font-bold text-primary`}
 				onClick={logout}
 			>
-				Log out
+				LOG OUT
 			</button>
 		</div>
 	);

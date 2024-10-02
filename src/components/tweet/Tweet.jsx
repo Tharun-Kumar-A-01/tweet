@@ -10,38 +10,31 @@ import { verifyToken } from "@/lib/auth";
 import { spaceGrotesk } from "@/app/page";
 import Cookies from "js-cookie";
 
-const Tweet = ({ tweet }) => {
-	const [userName, setUserName] = useState(null);
+const Tweet = ( {tweet, user} ) => {
+	const userName = user.username;
+	const token = user.token;
 	const [isOwn, setIsOwn] = useState(false);
-	const [token, setToken] = useState(null);
 	const [liked, setLiked] = useState(false);
 	const [likesCount, setLikesCount] = useState(tweet.likes.length);
 
 	useEffect(() => {
-		// Check if the code is running on the client side
 		if (typeof window !== "undefined") {
 			try {
-				const localToken = Cookies.get("token");
-				if (localToken) {
-					setToken(localToken);
-					const user_name = verifyToken(localToken);
-					if (user_name) {
-						setUserName(user_name);
-						setIsOwn(user_name === tweet.username);
-						if (tweet.likes.includes(user_name)) {
+					if (userName) {
+						setIsOwn(userName === tweet.username);
+						if (tweet.likes.includes(userName)) {
 							setLiked(true);
 						}
 					}
-				}
 			} catch (error) {
-				console.warn("Error verifying username");
+				console.warn("Error :",error);
 			}
 		}
-	}, [tweet, token]);
+	}, [tweet,userName]);
 
 	const handleLike = async (e, ObjectId) => {
 		e.preventDefault();
-		if (!token) {
+		if (!token || !userName) {
 			return null;
 		}
 		try {
@@ -76,7 +69,7 @@ const Tweet = ({ tweet }) => {
 
 	const handleDelete = async (e, ObjectId) => {
 		e.preventDefault();
-		if (!token) {
+		if (!token || !userName) {
 			return null;
 		}
 		try {
